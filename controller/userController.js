@@ -59,7 +59,8 @@ export const authUser = asyncHandler(async (req, res) => {
 })
 
 export const logoutUser = (req, res) => {
-  res.status(200).json({ message: 'Logout User' })
+  res.clearCookie('jwtNodeApi')
+  res.status(200).json({ message: 'Logged out' })
 }
 
 export const getUserProfile = (req, res) => {
