@@ -1,4 +1,5 @@
 import asyncHandler from 'express-async-handler'
+import jwt from 'jsonwebtoken'
 import User from '../model/User.js'
 
 export const registerUser = asyncHandler(async (req, res) => {
@@ -43,6 +44,13 @@ export const authUser = asyncHandler(async (req, res) => {
 
   const passwordsMatch = await user.checkPasswords(password)
   if (passwordsMatch) {
+    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
+      expiresIn: '30d'
+    })
+    res.cookie('jwtNodeApi', token, {
+      httpOnly: true,
+      maxAge: 30 * 24 * 3600 * 1000
+    })
     res.status(200).json({ _id: user._id, name: user.name, email: user.email })
   } else {
     res.status(400)
