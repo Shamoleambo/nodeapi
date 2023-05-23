@@ -63,9 +63,11 @@ export const logoutUser = (req, res) => {
   res.status(200).json({ message: 'Logged out' })
 }
 
-export const getUserProfile = (req, res) => {
-  res.status(200).json({ message: 'Get User Profile' })
-}
+export const getUserProfile = asyncHandler(async (req, res) => {
+  const userId = req.userId
+  const user = await User.findById(userId).select('-password')
+  res.status(200).json(user)
+})
 
 export const updateUserProfile = (req, res) => {
   res.status(200).json({ message: 'Update User Profile' })
