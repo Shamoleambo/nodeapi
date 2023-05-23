@@ -4,7 +4,7 @@ export const notFound = (req, res, next) => {
 }
 
 const errorHandler = (err, req, res, next) => {
-  res.status(400).json({ message: err.message })
+  res.json({ message: err.message })
 }
 
 export default errorHandler
