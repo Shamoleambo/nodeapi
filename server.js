@@ -1,5 +1,6 @@
 import express from 'express'
 import dotenv from 'dotenv'
+import cookieParser from 'cookie-parser'
 import userRouter from './routes/userRoutes.js'
 import connectToDB from './config/db.js'
 import errorHandler, {
@@ -14,6 +15,7 @@ connectToDB()
 const app = express()
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
+app.use(cookieParser())
 
 app.use('/api/users', userRouter)
 
