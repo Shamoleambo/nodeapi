@@ -28,9 +28,9 @@ export const registerUser = asyncHandler(async (req, res) => {
   user.name = name
   user.email = email
   user.password = password
-
   await user.save()
-  res.status(200).json({ user })
+
+  res.status(201).json({ user })
 })
 
 export const authUser = (req, res) => {
