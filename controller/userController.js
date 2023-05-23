@@ -4,6 +4,19 @@ import User from '../model/User.js'
 export const registerUser = asyncHandler(async (req, res) => {
   const { name, email, password } = req.body
 
+  if (!name || !email || !password) {
+    res.status(400)
+    throw new Error('Name, E-mail and Password must not be empty')
+  }
+  if (
+    name.trim().length === 0 ||
+    email.trim().length === 0 ||
+    password.trim().length === 0
+  ) {
+    res.status(400)
+    throw new Error('Name, E-mail and Password must not be empty')
+  }
+
   const user = new User()
 
   user.name = name
