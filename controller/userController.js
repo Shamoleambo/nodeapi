@@ -17,25 +17,38 @@ export const registerUser = asyncHandler(async (req, res) => {
     throw new Error('Name, E-mail and Password must not be empty')
   }
 
-  const user = new User()
-
   const userExists = await User.findOne({ email })
   if (userExists) {
     res.status(400)
     throw new Error('User already exists')
   }
 
+  const user = new User()
   user.name = name
   user.email = email
   user.password = password
   await user.save()
 
-  res.status(201).json({ user })
+  res.status(201).json({ _id: user._id, name: user.name, email: user.email })
 })
 
-export const authUser = (req, res) => {
-  res.status(200).json({ message: 'Authenticate User' })
-}
+export const authUser = asyncHandler(async (req, res) => {
+  const { email, password } = req.body
+
+  const user = await User.findOne({ email })
+  if (!user) {
+    res.status(400)
+    throw new Error('Invalid User or Password')
+  }
+
+  const passwordsMatch = await user.checkPasswords(password)
+  if (passwordsMatch) {
+    res.status(200).json({ _id: user._id, name: user.name, email: user.email })
+  } else {
+    res.status(400)
+    throw new Error('Invalid User or Password')
+  }
+})
 
 export const logoutUser = (req, res) => {
   res.status(200).json({ message: 'Logout User' })
